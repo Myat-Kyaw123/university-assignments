@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Change Calculator (THB)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    .calculator {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .result p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>Change Calculator (Thai Baht)</h2>
+    <input type="number" id="price" placeholder="Enter price (฿)">
+    <input type="number" id="paid" placeholder="Enter amount paid (฿)">
+    <br>
+    <button onclick="calculateChange()">Calculate</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateChange() {
+      let price = parseFloat(document.getElementById("price").value);
+      let paid = parseFloat(document.getElementById("paid").value);
+      let resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      if (isNaN(price) || isNaN(paid)) {
+        resultDiv.innerHTML = "<p>Please enter valid numbers.</p>";
+        return;
+      }
+
+      if (paid < price) {
+        resultDiv.innerHTML = "<p>Amount paid is less than the price!</p>";
+        return;
+      }
+
+      let change = paid - price;
+      resultDiv.innerHTML += `<p>Total Change: ฿${change.toFixed(2)}</p>`;
+
+      let bills = [1000, 500, 100, 50, 20];
+      for (let i = 0; i < bills.length; i++) {
+        let count = Math.floor(change / bills[i]);
+        if (count > 0) {
+          resultDiv.innerHTML += `<p>${count} x ฿${bills[i]}</p>`;
+          change -= count * bills[i];
+        }
+      }
+
+      let coins = [10, 5, 2, 1, 0.5, 0.25];
+      for (let j = 0; j < coins.length; j++) {
+        let count = Math.floor(change / coins[j]);
+        if (count > 0) {
+          resultDiv.innerHTML += `<p>${count} x ฿${coins[j].toFixed(2)} coin</p>`;
+          change -= count * coins[j];
+          change = parseFloat(change.toFixed(2)); // fix floating point issue
+        }
+      }
+    }
+  </script>
+</body>
+</html>
